@@ -1,0 +1,28 @@
+body {
+  margin: 0;
+  box-sizing: border-box;
+  background-color: #e9ebee !important;
+  font-family: 'Roboto', 'sans-serif';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.bodyContainer{
+  margin: 0;
+}
+
+.MuiCardMedia-media{
+  width: 45% !important
+}
+
+.MuiDialog-paper{
+  width: 100%
+}
+
+@media only screen and (min-width: 1200px) {
+  .bodyContainer{
+    margin: 0 auto 0 auto;
+    max-width: 1140px;
+    width: 1012px;
+  }
+}
