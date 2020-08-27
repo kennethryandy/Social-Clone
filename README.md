@@ -6,7 +6,7 @@ Social media app that has full authentication that will let the user create a po
 
 ## Author
 
-Kenneth Ryan D.
+Kenneth Ryan Dy
 
 ## Table of Contents
 * [About this Project](#about-this-project)
@@ -15,7 +15,7 @@ Kenneth Ryan D.
 * [Technologies](#technologies)
 
 ## About this Project
-Web application that is similar to social media app.
+Web application that is similar to a social media app.
 
 ## Goal for this Project
 The goal of this project was to learn about the MERN stack and MongoDB.
@@ -37,7 +37,7 @@ $ npm run dev
 
 # Run the React client
 $ cd client
-$ npm run client
+$ npm start
 
 # Server runs on http://localhost:5000 and client on http://localhost:3000
 ```
@@ -46,5 +46,6 @@ $ npm run client
 * React
 * Redux
 * Express
+* Graphql
 * Node.js
 * MongoDB
