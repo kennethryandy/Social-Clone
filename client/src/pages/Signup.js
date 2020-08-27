@@ -103,7 +103,7 @@ const Signup = ({history}) => {
           size="medium"
           disabled={loading}
           >{loading ? <CircularProgress className={classes.spinner}/> : 'Signup'}</Button>
-          <small>Already have an account? log in <MuiLink color="secondary" component={Link} to='/signup'>here <LoginIcon color="secondary" className={classes.loginIcon}/></MuiLink></small>
+          <small>Already have an account? log in <MuiLink color="secondary" component={Link} to='/login'>here <LoginIcon color="secondary" className={classes.loginIcon}/></MuiLink></small>
       </form>
     </div>
   )

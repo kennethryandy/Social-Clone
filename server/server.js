@@ -10,9 +10,10 @@ const {graphqlHTTP} = require('express-graphql')
 const app = express();
 app.use(express.json());
 app.use(helmet());
-app.use(cors({
-  origin: process.env.CORS_ORIGIN
-}));
+// app.use(cors({
+//   origin: process.env.CORS_ORIGIN
+// }));
+app.use(cors())
 app.use('/uploads',express.static('uploads'))
 
 const rootSchema = require('./graphql/schema')
