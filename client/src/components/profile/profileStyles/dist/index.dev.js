@@ -57,7 +57,7 @@ var postsStyles = (0, _styles.makeStyles)(function (theme) {
   return {
     cards: {
       margin: theme.spacing(3),
-      width: '50%'
+      width: '60%'
     },
     actions: {
       display: 'flex',
@@ -66,6 +66,12 @@ var postsStyles = (0, _styles.makeStyles)(function (theme) {
     },
     inputIcon: {
       marginRight: theme.spacing(1)
+    },
+    closeButton: {
+      position: 'absolute',
+      right: theme.spacing(1),
+      top: theme.spacing(1),
+      color: theme.palette.grey[500]
     }
   };
 });

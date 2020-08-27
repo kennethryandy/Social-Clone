@@ -53,7 +53,6 @@ const CreatePost = (props) => {
     setInput("")
     setShowButton("none")
   }
-  console.log(credentials.imageUrl)
   return (
     credentials && 
     <Card style={{width: props.location.pathname !== '/' ? "60%" : ""}} className={classes.cards} elevation={3}>
@@ -66,7 +65,7 @@ const CreatePost = (props) => {
       InputProps={{
         startAdornment: (
           <InputAdornment position="start">
-            <Avatar src={`http://localhost:4000/${credentials?.imageUrl}`} className={classes.avatar}/>
+            <Avatar src={`${process.env.REACT_APP_API_URL}/${credentials?.imageUrl}`} className={classes.avatar}/>
           </InputAdornment>
         ),
       }}

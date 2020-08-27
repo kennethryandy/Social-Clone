@@ -4,7 +4,7 @@ import { getAllPosts } from './dataActions'
 
 export const uploadImage = (formData) => async dispatch => {
   try {
-    await axios.post('/api/user/uploadImage', formData)
+    await axios.post(process.env.REACT_APP_API_URL+'/api/user/uploadImage', formData)
     dispatch({type:LOADING_PROFILE_PICTURE})
     dispatch(getUserData())
     dispatch(getAllPosts())
@@ -16,7 +16,7 @@ export const uploadImage = (formData) => async dispatch => {
 export const loginUser = (userData, history) => async dispatch => {
   dispatch({type: LOADING_UI})
   try {
-    const res = await axios.post('/graphql', userData)
+    const res = await axios.post(process.env.REACT_APP_API_URL+'/graphql', userData)
     setAuthorizationHeaders(res.data.data.login.token)
     dispatch(getUserData())
     dispatch({type: CLEAR_ERRORS})
@@ -33,7 +33,7 @@ export const loginUser = (userData, history) => async dispatch => {
 export const signupUser = (newUser, history) => async dispatch => {
   dispatch({type: LOADING_UI})
   try {
-    const res = await axios.post('/graphql', newUser)
+    const res = await axios.post(process.env.REACT_APP_API_URL+'/graphql', newUser)
     setAuthorizationHeaders(res.data.data.signup.token)
     dispatch(getUserData())
     dispatch({type: CLEAR_ERRORS})
@@ -56,7 +56,7 @@ export const logoutUser = () => dispatch => {
 export const getUserData = () => async dispatch => {
   dispatch({type: LOADING_USER})
   try {
-    const res = await axios.get('/api/user')
+    const res = await axios.get(process.env.REACT_APP_API_URL+'/api/user')
     dispatch({
       type: SET_USER,
       payload: res.data
@@ -79,7 +79,7 @@ export const editUserDetails = (userDetails) => async dispatch => {
     `
   }
   try {
-    const res = await axios.post('/graphql', reqBody)
+    const res = await axios.post(process.env.REACT_APP_API_URL+'/graphql', reqBody)
     dispatch({type:LOADING_USER_DETAILS})
     dispatch({
       type:EDIT_USER_DETAILS,
@@ -93,7 +93,7 @@ export const editUserDetails = (userDetails) => async dispatch => {
 export const getUser = id => async dispatch => {
   dispatch({type:LOADING_USER})
   try {
-    const res = await axios.get(`/api/user/${id}`)
+    const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/user/${id}`)
     dispatch({
       type: GET_USER,
       payload: res.data

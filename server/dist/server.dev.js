@@ -8,8 +8,6 @@ var helmet = require('helmet');
 
 var cors = require('cors');
 
-var morgan = require('morgan');
-
 var mongoose = require('mongoose');
 
 var _require = require('express-graphql'),
@@ -20,8 +18,7 @@ app.use(express.json());
 app.use(helmet());
 app.use(cors({
   origin: process.env.CORS_ORIGIN
-})); // app.use(morgan('common'));
-
+}));
 app.use('/uploads', express["static"]('uploads'));
 
 var rootSchema = require('./graphql/schema');

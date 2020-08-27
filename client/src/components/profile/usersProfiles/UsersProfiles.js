@@ -31,7 +31,7 @@ const UsersProfiles = () => {
         <CardActionArea className={classes.imageButton}>
           <CardMedia 
             component="img"
-            image={`/${getUser.imageUrl}`}
+            image={`${process.env.REACT_APP_API_URL}/${getUser.imageUrl}`}
             className={classes.profileImage}
           />
         </CardActionArea>

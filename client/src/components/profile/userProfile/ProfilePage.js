@@ -71,13 +71,13 @@ const ProfilePage = () => {
             <Tooltip title="Edit profile picture" placement="top">
               <CardMedia 
                 component="img"
-                image={`/${credentials.imageUrl}`}
+                image={`${process.env.REACT_APP_API_URL}/${credentials.imageUrl}`}
                 className={classes.profileImage}
               />
             </Tooltip>) : (
               <CardMedia 
                 component="img"
-                image={`/uploads/default-profile-pic.png`}
+                image={`${process.env.REACT_APP_API_URL}/uploads/default-profile-pic.png`}
                 className={classes.profileImage}
               />
             )

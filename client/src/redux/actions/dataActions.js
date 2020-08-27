@@ -31,7 +31,7 @@ export const getAllPosts = () => async dispatch => {
         }
       `
     }
-    const res = await axios.post('/graphql',reqBody)
+    const res = await axios.post(process.env.REACT_APP_API_URL+'/graphql',reqBody)
     dispatch({
       type:GET_POSTS,
       payload: res.data.data.posts
@@ -71,7 +71,7 @@ export const createPost = (content) => async dispatch => {
     `
   }
   try {
-    const res = await axios.post('/graphql', reqBody)
+    const res = await axios.post(process.env.REACT_APP_API_URL+'/graphql', reqBody)
     dispatch({
       type: CREATE_POST,
       payload: res.data.data.createPost
@@ -118,8 +118,7 @@ export const likePost = (postId) => async dispatch => {
     `
   } 
   try {
-    const res = await axios.post('/graphql', reqBody)
-    console.log("DATA: ",res)
+    const res = await axios.post(process.env.REACT_APP_API_URL+'/graphql', reqBody)
     dispatch({
       type:LIKE_POST,
       payload: res.data.data.likePost
@@ -158,7 +157,7 @@ export const unlikePost = (postId) => async dispatch => {
       }
     `
   }
-  const res = await axios.post('/graphql', reqBody)
+  const res = await axios.post(process.env.REACT_APP_API_URL+'/graphql', reqBody)
   dispatch({
     type:UNLIKE_POST,
     payload: res.data.data.unlikePost
@@ -182,7 +181,7 @@ export const addComment = (postId, content) => async dispatch => {
     `
   }
   try {
-    const res = await axios.post('/graphql', reqBody)
+    const res = await axios.post(process.env.REACT_APP_API_URL+'/graphql', reqBody)
     dispatch({
       type:ADD_COMMENT,
       payload: res.data.data.addComment

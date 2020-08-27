@@ -1,5 +1,6 @@
 import React,{useState} from 'react'
 import Comment from '../post/Comment'
+import ExpandPost from '../post/ExpandPost'
 import Like from '../post/Like'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
@@ -22,11 +23,14 @@ import Collapse from '@material-ui/core/Collapse'
 import TextField from '@material-ui/core/TextField'
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Badge from '@material-ui/core/Badge';
+import Dialog from '@material-ui/core/Dialog'
+import Zoom from '@material-ui/core/Zoom';
 //ICONS
 import AccountCircle from '@material-ui/icons/AccountCircle'
 import SendIcon from '@material-ui/icons/Send';
-import LinkIcon from '@material-ui/icons/CallMade';
+import ExpandIcon from '@material-ui/icons/CallMade';
 import CommentIcon from '@material-ui/icons/QuestionAnswer';
+import CloseIcon from '@material-ui/icons/Close'
 
 const UserPosts = ({posts, username, imageUrl, _id}) => {
   const classes = postsStyles()
@@ -34,14 +38,19 @@ const UserPosts = ({posts, username, imageUrl, _id}) => {
   const user = useSelector(state => state.user)
   const [expanded, setExpanded] = useState(false);
   const [commentInput, setCommentInput] = useState("")
+  const [expandPost, setExpandPost] = useState(false)
   dayjs.extend(relativeTime)
 
   const handleCommentSubmit = () => {
-    if(commentInput.trim() !== ""){
-      dispatch(addComment(posts._id, commentInput))
-      setCommentInput("")
+    if(user.authenticated){
+      if(commentInput.trim() !== ""){
+        dispatch(addComment(posts._id, commentInput))
+        setCommentInput("")
+      }else{
+        setCommentInput("")
+        return
+      }
     }else{
-      setCommentInput("")
       return
     }
   }
@@ -50,7 +59,7 @@ const UserPosts = ({posts, username, imageUrl, _id}) => {
     <Card className={classes.cards} elevation={2}>
         <CardHeader
           avatar={
-            <Avatar src={`/${imageUrl}`}/>
+            <Avatar src={`${process.env.REACT_APP_API_URL}/${imageUrl}`}/>
           }
           title={<MuiLink component={Link} to={`/user/${_id}`}>{username}</MuiLink>}
           subheader={<Typography color="textSecondary" variant="caption" component="p">{dayjs(posts.createdAt).fromNow()}</Typography>}
@@ -68,9 +77,15 @@ const UserPosts = ({posts, username, imageUrl, _id}) => {
               <CommentIcon />
             </Badge>
           </IconButton>
-          <IconButton disabled={!user.authenticated}>
-            <LinkIcon  />
+          <IconButton onClick={() => setExpandPost(true)}>
+            <ExpandIcon/>
           </IconButton>
+          <Dialog TransitionComponent={Zoom} maxWidth="sm" open={expandPost} onClose={() => setExpandPost(false)}>
+            <IconButton aria-label="close" className={classes.closeButton} onClick={() => setExpandPost(false)}>
+              <CloseIcon />
+            </IconButton>
+            <ExpandPost post={posts} imageUrl={imageUrl} username={username} setExpandPost={setExpandPost}/>
+          </Dialog>
         </CardActions>
         <Collapse in={expanded} timeout="auto" unmountOnExit>
             <CardContent style={{maxHeight: 300, overflow: 'auto',position: 'relative'}}>
@@ -86,7 +101,7 @@ const UserPosts = ({posts, username, imageUrl, _id}) => {
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  {user.authenticated ? <Avatar className={classes.inputIcon} src={`/${user.credentials.imageUrl}`}/> : <AccountCircle/>}
+                  {user.authenticated ? <Avatar className={classes.inputIcon} src={`${process.env.REACT_APP_API_URL}/${user.credentials.imageUrl}`}/> : <AccountCircle/>}
                 </InputAdornment>
               ),
               endAdornment:( 

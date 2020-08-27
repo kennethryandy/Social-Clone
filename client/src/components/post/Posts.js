@@ -79,7 +79,7 @@ const Posts = ({post}) => {
       <Card className={classes.cards} elevation={2}>
         <CardHeader
           avatar={
-            <Avatar component={Link} to={`/user/${creator._id}`} src={`${creator.imageUrl}`}/>
+            <Avatar component={Link} to={`/user/${creator._id}`} src={`${process.env.REACT_APP_API_URL}/${creator.imageUrl}`}/>
           }
           title={<MuiLink component={Link} to={`/user/${creator._id}`}>{creator.username}</MuiLink>}
           subheader={<Typography color="textSecondary" variant="caption" component="p">{dayjs(createdAt).fromNow()}</Typography>}
@@ -102,9 +102,9 @@ const Posts = ({post}) => {
           </IconButton>
           <Dialog TransitionComponent={Zoom} maxWidth="sm" open={expandPost} onClose={() => setExpandPost(false)}>
             <IconButton aria-label="close" className={classes.closeButton} onClick={() => setExpandPost(false)}>
-                <CloseIcon />
+              <CloseIcon />
             </IconButton>
-            <ExpandPost post={post} setExpandPost={setExpandPost}/>
+            <ExpandPost post={post} imageUrl={creator.imageUrl} username={creator.username} setExpandPost={setExpandPost}/>
           </Dialog>
         </CardActions>
         <Collapse in={expanded} timeout="auto" unmountOnExit>
@@ -121,7 +121,7 @@ const Posts = ({post}) => {
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  {user.authenticated ? <Avatar className={classes.inputIcon} src={`${user.credentials.imageUrl}`}/> : <AccountCircle/>}
+                  {user.authenticated ? <Avatar className={classes.inputIcon} src={`${process.env.REACT_APP_API_URL}/${user.credentials.imageUrl}`}/> : <AccountCircle/>}
                 </InputAdornment>
               ),
               endAdornment:( 

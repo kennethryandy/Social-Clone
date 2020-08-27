@@ -42,7 +42,7 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const ExpandPost = ({post, setExpandPost}) => {
+const ExpandPost = ({post, setExpandPost, imageUrl, username}) => {
   const dispatch = useDispatch()
   const user = useSelector(state => state.user)
   const {creator, content, createdAt} = post
@@ -67,9 +67,9 @@ const ExpandPost = ({post, setExpandPost}) => {
       <Card className={classes.cards} >
         <CardHeader
           avatar={
-            <Avatar component={Link} to={`/user/${creator._id}`} src={`${creator.imageUrl}`}/>
+            <Avatar component={Link} to={`/user/${creator._id}`} src={`${process.env.REACT_APP_API_URL}/${imageUrl}`}/>
           }
-          title={<MuiLink component={Link} to={`/user/${creator._id}`}>{creator.username}</MuiLink>}
+          title={<MuiLink component={Link} to={`/user/${creator._id}`}>{username}</MuiLink>}
           subheader={<Typography color="textSecondary" variant="caption" component="p">{dayjs(createdAt).fromNow()}</Typography>}
         />
         <CardContent>

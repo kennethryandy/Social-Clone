@@ -122,8 +122,8 @@ module.exports = {
     if(!req.isAuth){
       throw new Error('Unauthorized!');
     }
-    const likesDoc = await Like.findOne({post: postId, user: req.user.userId}).populate('comments')
-    const postDoc = await Post.findOne({_id:postId})
+    const likesDoc = await Like.findOne({post: postId, user: req.user.userId})
+    const postDoc = await Post.findOne({_id:postId}).populate('comments')
     let postData;
     try {
       if(postDoc){

@@ -2,7 +2,6 @@ require('dotenv').config();
 const express = require('express');
 const helmet = require('helmet');
 const cors = require('cors');
-const morgan = require('morgan');
 const mongoose = require('mongoose')
 const {graphqlHTTP} = require('express-graphql')
 
@@ -14,7 +13,6 @@ app.use(helmet());
 app.use(cors({
   origin: process.env.CORS_ORIGIN
 }));
-// app.use(morgan('common'));
 app.use('/uploads',express.static('uploads'))
 
 const rootSchema = require('./graphql/schema')

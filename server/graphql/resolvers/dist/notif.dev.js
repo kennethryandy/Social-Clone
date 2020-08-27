@@ -305,14 +305,14 @@ module.exports = {
             return regeneratorRuntime.awrap(Like.findOne({
               post: postId,
               user: req.user.userId
-            }).populate('comments'));
+            }));
 
           case 5:
             likesDoc = _context4.sent;
             _context4.next = 8;
             return regeneratorRuntime.awrap(Post.findOne({
               _id: postId
-            }));
+            }).populate('comments'));
 
           case 8:
             postDoc = _context4.sent;
