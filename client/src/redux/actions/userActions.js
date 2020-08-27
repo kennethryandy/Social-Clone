@@ -109,7 +109,7 @@ export const getUser = id => async dispatch => {
 
 export const markedNotif = (userId) => async dispatch => {
   try {
-    await axios.post('/api/user/notifications', {userId})
+    await axios.post(process.env.REACT_APP_API_URL+'/api/user/notifications', {userId})
     dispatch({
       type: MARKED_NOTIFICATIONS_READ
     })

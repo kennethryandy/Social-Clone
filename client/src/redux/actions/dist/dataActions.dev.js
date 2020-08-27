@@ -195,16 +195,15 @@ var addComment = function addComment(postId, content) {
               type: _types.ADD_COMMENT,
               payload: res.data.data.addComment
             });
-            _context5.next = 12;
+            _context5.next = 11;
             break;
 
           case 8:
             _context5.prev = 8;
             _context5.t0 = _context5["catch"](1);
-            console.log("ERROR", _context5.t0);
             console.log(_context5.t0.message);
 
-          case 12:
+          case 11:
           case "end":
             return _context5.stop();
         }

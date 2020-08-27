@@ -82,7 +82,7 @@ const Notifications = () => {
   const unreadNotif = notifications.filter(notif => notif.read === false)
   const notificationsIcon = notifications && notifications.length > 0 ? (
     unreadNotif && unreadNotif.length > 0 ? (
-      <Badge badgeContent={unreadNotif.length} color='inherit'>
+      <Badge badgeContent={unreadNotif.length} color="primary">
         <NotificationsIcon color="secondary"/>
       </Badge>
     ) : (
@@ -144,7 +144,7 @@ const Notifications = () => {
         <IconButton aria-label="close" className={classes.closeButton} onClick={() => setExpandPost(false)}>
             <CloseIcon />
         </IconButton>
-        {post && <ExpandPost post={post} setExpandPost={setExpandPost}/>}
+        {post && <ExpandPost post={post} imageUrl={post.creator?.imageUrl} username={post.creator?.username} setExpandPost={setExpandPost}/>}
       </Dialog>
     </>
   )

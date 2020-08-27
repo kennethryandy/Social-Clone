@@ -1,5 +1,4 @@
 import React,{useEffect} from 'react'
-import {Redirect} from 'react-router-dom'
 import ProfilePage from './userProfile/ProfilePage'
 import UsersProfiles from './usersProfiles/UsersProfiles'
 //Redux
@@ -17,18 +16,14 @@ const Profiles = ({match}) => {
     }
   // eslint-disable-next-line
   }, [])
-  if(user.authenticated){
-    if(!user.loading ){
-      if(id && user.credentials._id === id){
-        return <ProfilePage/>
-      }else{
-        return <UsersProfiles/>
-      }
+  if(!user.loading ){
+    if(id && user.credentials._id === id){
+      return <ProfilePage/>
     }else{
-      return <ProfileSkeleton/>
+      return <UsersProfiles/>
     }
   }else{
-    return <Redirect to='/login' />
+    return <ProfileSkeleton/>
   }
 }
 

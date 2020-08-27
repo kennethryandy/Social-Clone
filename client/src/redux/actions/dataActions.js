@@ -187,7 +187,6 @@ export const addComment = (postId, content) => async dispatch => {
       payload: res.data.data.addComment
     })
   } catch (error) {
-    console.log("ERROR", error)
     console.log(error.message)
   }
 }

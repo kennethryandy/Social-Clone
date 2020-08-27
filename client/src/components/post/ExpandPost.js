@@ -60,7 +60,6 @@ const ExpandPost = ({post, setExpandPost, imageUrl, username}) => {
       return
     }
   }
-
   return (
     user.authenticated &&
     <>
@@ -103,7 +102,7 @@ const ExpandPost = ({post, setExpandPost, imageUrl, username}) => {
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  {user.authenticated ? <Avatar className={classes.inputIcon} src={`${user.credentials.imageUrl}`}/> : <AccountCircle/>}
+                  {user.authenticated ? <Avatar className={classes.inputIcon} src={`${process.env.REACT_APP_API_URL}/${user.credentials.imageUrl}`}/> : <AccountCircle/>}
                 </InputAdornment>
               ),
               endAdornment:( 

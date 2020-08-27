@@ -295,7 +295,7 @@ var markedNotif = function markedNotif(userId) {
           case 0:
             _context7.prev = 0;
             _context7.next = 3;
-            return regeneratorRuntime.awrap(_axios["default"].post('/api/user/notifications', {
+            return regeneratorRuntime.awrap(_axios["default"].post(process.env.REACT_APP_API_URL + '/api/user/notifications', {
               userId: userId
             }));
 
