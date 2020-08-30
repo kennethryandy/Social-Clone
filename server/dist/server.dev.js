@@ -15,10 +15,10 @@ var _require = require('express-graphql'),
 
 var app = express();
 app.use(express.json());
-app.use(helmet()); // app.use(cors({
-//   origin: process.env.CORS_ORIGIN
-// }));
-
+app.use(helmet());
+app.use(cors({
+  origin: process.env.CORS_ORIGIN
+}));
 app.use(cors());
 app.use('/uploads', express["static"]('uploads'));
 
@@ -26,8 +26,13 @@ var rootSchema = require('./graphql/schema');
 
 var rootResolver = require('./graphql/resolvers');
 
-var isAuth = require('./middlewares/isAuth'); //auth middleware
+var isAuth = require('./middlewares/isAuth');
 
+app.get('/', function (req, res) {
+  res.json({
+    message: "Hello"
+  });
+}); //auth middleware
 
 app.use(isAuth); //graphql
 

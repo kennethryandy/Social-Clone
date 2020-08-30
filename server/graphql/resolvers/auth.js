@@ -1,11 +1,11 @@
 const User = require('../../model/users')
 const Notification = require('../../model/notifications')
 const Likes = require('../../model/likes')
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcryptjs')
 const JWT = require('jsonwebtoken')
 
 const merge = require('./merge')
-const {signupValidators, loginValidators} = require('../../util/validators')
+const {signupValidators} = require('../../util/validators')
 
 module.exports = {
   users: async () => {

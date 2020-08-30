@@ -12,7 +12,6 @@ const commentSchema = new Schema({
   },
   imageUrl:{
     type: String,
-    required: true
   },
   username: {
     type: String,

@@ -1,4 +1,4 @@
-import { SET_USER, SET_AUTH, SET_UNAUTH, LOADING_USER, LIKE_POST, UNLIKE_POST, EDIT_USER_DETAILS, LOADING_PROFILE_PICTURE, LOADING_USER_DETAILS, GET_USER, ADD_POST, ADD_COMMENT, MARKED_NOTIFICATIONS_READ } from '../types'
+import { SET_USER, SET_USERS, SET_AUTH, SET_UNAUTH, LOADING_USER, LIKE_POST, UNLIKE_POST, EDIT_USER_DETAILS, LOADING_PROFILE_PICTURE, LOADING_USER_DETAILS, ADD_POST, ADD_COMMENT, MARKED_NOTIFICATIONS_READ } from '../types'
 
 const initialState = {
   authenticated: false,
@@ -6,9 +6,9 @@ const initialState = {
   loadingUserDetails: false,
   loadingProfile: false,
   credentials: {},
-  getUser: {},
   likes: [],
-  notifications: []
+  notifications: [],
+  users: []
 }
 
 export default (state = initialState, action) => {
@@ -30,10 +30,16 @@ export default (state = initialState, action) => {
     case SET_USER:
       return {
         ...state,
-        ...action.payload,
         authenticated: true,
+        ...action.payload,
         loading: false,
         loadingProfile: false
+      }
+    case SET_USERS:
+      return {
+        ...state,
+        authenticated: true,
+        users: action.payload
       }
     case LOADING_USER:
       return {
@@ -66,12 +72,6 @@ export default (state = initialState, action) => {
         ...state,
         credentials: {...state.credentials, bio: action.payload.bio, location: action.payload.location, status: action.payload.status},
         loadingUserDetails: false
-      }
-    case GET_USER:
-      return {
-        ...state,
-        getUser: action.payload,
-        loading: false
       }
     case ADD_POST:
       return {

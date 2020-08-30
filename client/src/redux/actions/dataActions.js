@@ -90,6 +90,7 @@ export const createPost = (content) => async dispatch => {
 
 
 export const likePost = (postId) => async dispatch => {
+  console.log(postId)
   const reqBody = {
     query: `
       mutation{

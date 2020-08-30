@@ -1,4 +1,5 @@
 import React from 'react'
+import img from '../../assests/no-man.jpg'
 import {withRouter, Link} from 'react-router-dom'
 //MATERIAL UI
 import Card from '@material-ui/core/Card';
@@ -15,7 +16,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Divider from '@material-ui/core/Divider';
 import MuiLink from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
-//ICONS & SKELETONS
+//ICONS 
 import InfoIcon from '@material-ui/icons/Info';
 import HomeIcon from '@material-ui/icons/Home';
 import FavoriteIcon from '@material-ui/icons/Favorite';
@@ -70,7 +71,7 @@ const Profile = () => {
       <CardActionArea component={Link} to={`/user/${credentials._id}`}>
         <CardMedia 
           component="img"
-          image={`${process.env.REACT_APP_API_URL}/${credentials.imageUrl}`}
+          image={credentials.imageUrl ? `${process.env.REACT_APP_API_URL}/api/user/img/${credentials.imageUrl}` : img}
           alt="profile-image"
           className={classes.profileImage}
           title={`${credentials.username} profile image`}

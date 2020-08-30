@@ -61,12 +61,12 @@ const ExpandPost = ({post, setExpandPost, imageUrl, username}) => {
     }
   }
   return (
-    user.authenticated &&
+    user.authenticated && post &&
     <>
       <Card className={classes.cards} >
         <CardHeader
           avatar={
-            <Avatar component={Link} to={`/user/${creator._id}`} src={`${process.env.REACT_APP_API_URL}/${imageUrl}`}/>
+            <Avatar component={Link} to={`/user/${creator._id}`} src={`${process.env.REACT_APP_API_URL}/api/user/img/${imageUrl}`}/>
           }
           title={<MuiLink component={Link} to={`/user/${creator._id}`}>{username}</MuiLink>}
           subheader={<Typography color="textSecondary" variant="caption" component="p">{dayjs(createdAt).fromNow()}</Typography>}

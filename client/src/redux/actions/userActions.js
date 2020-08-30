@@ -1,4 +1,4 @@
-import { SET_USER, SET_ERRORS, CLEAR_ERRORS, LOADING_UI, SET_UNAUTH, LOADING_USER, EDIT_USER_DETAILS, LOADING_USER_DETAILS, LOADING_PROFILE_PICTURE, GET_USER, MARKED_NOTIFICATIONS_READ } from '../types'
+import { SET_USER, SET_USERS, SET_ERRORS, CLEAR_ERRORS, LOADING_UI, SET_UNAUTH, LOADING_USER, EDIT_USER_DETAILS, LOADING_USER_DETAILS, LOADING_PROFILE_PICTURE, MARKED_NOTIFICATIONS_READ } from '../types'
 import axios from 'axios'
 import { getAllPosts } from './dataActions'
 
@@ -18,6 +18,7 @@ export const loginUser = (userData, history) => async dispatch => {
   try {
     const res = await axios.post(process.env.REACT_APP_API_URL+'/graphql', userData)
     setAuthorizationHeaders(res.data.data.login.token)
+    dispatch(setUsers)
     dispatch(getUserData())
     dispatch({type: CLEAR_ERRORS})
     history.push('/')
@@ -35,6 +36,7 @@ export const signupUser = (newUser, history) => async dispatch => {
   try {
     const res = await axios.post(process.env.REACT_APP_API_URL+'/graphql', newUser)
     setAuthorizationHeaders(res.data.data.signup.token)
+    dispatch(setUsers)
     dispatch(getUserData())
     dispatch({type: CLEAR_ERRORS})
     history.push('/')
@@ -54,12 +56,58 @@ export const logoutUser = () => dispatch => {
 }
 
 export const getUserData = () => async dispatch => {
-  dispatch({type: LOADING_USER})
+  dispatch({type:LOADING_USER})
   try {
     const res = await axios.get(process.env.REACT_APP_API_URL+'/api/user')
     dispatch({
       type: SET_USER,
       payload: res.data
+    })
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+const setUsers = () => async dispatch => {
+  const reqBody = {
+    query: `
+      query{
+        users{
+          _id
+          username
+          imageUrl
+          bio
+          location
+          status
+          posts{
+            _id
+            content
+            commentCount
+            likeCount
+            createdAt
+            creator{
+              username
+              imageUrl
+              _id
+            }
+            comments{
+              _id
+              content
+              createdAt
+              imageUrl
+              postId
+              userId
+              username
+            }
+          }
+        }
+      }`
+  }
+  try {
+    const res = await axios.post(`${process.env.REACT_APP_API_URL}/graphql`, reqBody)
+    dispatch({
+      type: SET_USERS,
+      payload: res.data.data.users
     })
   } catch (error) {
     console.log(error)
@@ -87,23 +135,6 @@ export const editUserDetails = (userDetails) => async dispatch => {
     })
   } catch (error) {
     console.log(error)
-  }
-}
-
-export const getUser = id => async dispatch => {
-  dispatch({type:LOADING_USER})
-  try {
-    const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/user/${id}`)
-    dispatch({
-      type: GET_USER,
-      payload: res.data
-    })
-  } catch (error) {
-    console.log(error)
-      // dispatch({
-      //   type:SET_ERRORS,
-      //   payload: error.response.data.errors[0].message
-      // })
   }
 }
 

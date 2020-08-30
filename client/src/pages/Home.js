@@ -1,4 +1,5 @@
 import React,{useEffect} from 'react'
+import FlipMove from 'react-flip-move';
 //redux
 import {useDispatch, useSelector} from 'react-redux'
 import {getAllPosts} from '../redux/actions/dataActions'
@@ -45,7 +46,9 @@ const Home = () => {
         {!loading ? (
         <>
         <CreatePost/>
-        {posts?.map(post => <Posts key={post._id} post={post} />)}
+        <FlipMove>
+          {posts?.map(post => <Posts key={post._id} post={post} />)}
+        </FlipMove>
         </> ):
         <PostsSkeleton/>
       }

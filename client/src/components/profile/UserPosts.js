@@ -59,7 +59,7 @@ const UserPosts = ({posts, username, imageUrl, _id}) => {
     <Card className={classes.cards} elevation={2}>
         <CardHeader
           avatar={
-            <Avatar src={`${process.env.REACT_APP_API_URL}/${imageUrl}`}/>
+            <Avatar src={`${process.env.REACT_APP_API_URL}/api/user/img/${imageUrl}`}/>
           }
           title={<MuiLink component={Link} to={`/user/${_id}`}>{username}</MuiLink>}
           subheader={<Typography color="textSecondary" variant="caption" component="p">{dayjs(posts.createdAt).fromNow()}</Typography>}
@@ -88,8 +88,8 @@ const UserPosts = ({posts, username, imageUrl, _id}) => {
           </Dialog>
         </CardActions>
         <Collapse in={expanded} timeout="auto" unmountOnExit>
-            <CardContent style={{maxHeight: 300, overflow: 'auto',position: 'relative'}}>
-              {posts.comments && posts.comments.map(comment => <Comment comment={comment} key={comment._id}/> )}
+            <CardContent style={{maxHeight: 300, overflowY: 'scroll',position: 'relative'}}>
+              { posts?.comments.map(comment => <Comment comment={comment} key={comment._id}/> )}
             </CardContent>
           <TextField
             value={commentInput}
@@ -101,7 +101,7 @@ const UserPosts = ({posts, username, imageUrl, _id}) => {
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  {user.authenticated ? <Avatar className={classes.inputIcon} src={`${process.env.REACT_APP_API_URL}/${user.credentials.imageUrl}`}/> : <AccountCircle/>}
+                  {user.authenticated ? <Avatar className={classes.inputIcon} src={`${process.env.REACT_APP_API_URL}/api/user/img/${user.credentials.imageUrl}`}/> : <AccountCircle/>}
                 </InputAdornment>
               ),
               endAdornment:( 

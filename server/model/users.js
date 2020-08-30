@@ -18,7 +18,7 @@ const userSchema = new Schema({
     min: 6,
     max: 18,
   },
-  imageUrl: {type: String, default: "uploads\\default-profile-pic.png"},
+  imageUrl: {type: String},
   posts: [{type: Schema.Types.ObjectId, ref: 'Post'}],
   bio: String,
   location: String,

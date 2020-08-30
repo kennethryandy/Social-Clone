@@ -2,9 +2,9 @@
 export const SET_AUTH = 'SET_AUTH'
 export const SET_UNAUTH = 'SET_UNAUTH'
 export const SET_USER = 'SET_USER'
+export const SET_USERS = 'SET_USERS'
 export const LOADING_USER = 'LOADING_USER'
 export const EDIT_USER_DETAILS = 'EDIT_USER_DETAILS'
-export const GET_USER = 'GET_USER'
 export const ADD_POST = 'ADD_POST'
 export const MARKED_NOTIFICATIONS_READ = 'MARKED_NOTIFICATIONS_READ'
 //UI REDUCER TYPES

@@ -20,7 +20,6 @@ const notificationsSchema = new Schema({
   },
   imageUrl: {
     type: String,
-    required: true
   },
   postId:{
     type: Schema.Types.ObjectId,

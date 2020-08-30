@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.markedNotif = exports.getUser = exports.editUserDetails = exports.getUserData = exports.logoutUser = exports.signupUser = exports.loginUser = exports.uploadImage = void 0;
+exports.markedNotif = exports.editUserDetails = exports.getUserData = exports.logoutUser = exports.signupUser = exports.loginUser = exports.uploadImage = void 0;
 
 var _types = require("../types");
 
@@ -65,16 +65,17 @@ var loginUser = function loginUser(userData, history) {
           case 4:
             res = _context2.sent;
             setAuthorizationHeaders(res.data.data.login.token);
+            dispatch(setUsers);
             dispatch(getUserData());
             dispatch({
               type: _types.CLEAR_ERRORS
             });
             history.push('/');
-            _context2.next = 14;
+            _context2.next = 15;
             break;
 
-          case 11:
-            _context2.prev = 11;
+          case 12:
+            _context2.prev = 12;
             _context2.t0 = _context2["catch"](1);
 
             if (_context2.t0.response && _context2.t0.response.data && _context2.t0.response.data.errors) {
@@ -89,12 +90,12 @@ var loginUser = function loginUser(userData, history) {
               });
             }
 
-          case 14:
+          case 15:
           case "end":
             return _context2.stop();
         }
       }
-    }, null, null, [[1, 11]]);
+    }, null, null, [[1, 12]]);
   };
 };
 
@@ -117,16 +118,17 @@ var signupUser = function signupUser(newUser, history) {
           case 4:
             res = _context3.sent;
             setAuthorizationHeaders(res.data.data.signup.token);
+            dispatch(setUsers);
             dispatch(getUserData());
             dispatch({
               type: _types.CLEAR_ERRORS
             });
             history.push('/');
-            _context3.next = 14;
+            _context3.next = 15;
             break;
 
-          case 11:
-            _context3.prev = 11;
+          case 12:
+            _context3.prev = 12;
             _context3.t0 = _context3["catch"](1);
 
             if (_context3.t0.response && _context3.t0.response.data && _context3.t0.response.data.errors) {
@@ -141,12 +143,12 @@ var signupUser = function signupUser(newUser, history) {
               });
             }
 
-          case 14:
+          case 15:
           case "end":
             return _context3.stop();
         }
       }
-    }, null, null, [[1, 11]]);
+    }, null, null, [[1, 12]]);
   };
 };
 
@@ -203,7 +205,7 @@ var getUserData = function getUserData() {
 
 exports.getUserData = getUserData;
 
-var editUserDetails = function editUserDetails(userDetails) {
+var setUsers = function setUsers() {
   return function _callee5(dispatch) {
     var reqBody, res;
     return regeneratorRuntime.async(function _callee5$(_context5) {
@@ -211,14 +213,51 @@ var editUserDetails = function editUserDetails(userDetails) {
         switch (_context5.prev = _context5.next) {
           case 0:
             reqBody = {
-              query: "\n      mutation{\n        editUserDetails(userDetails:{bio:\"".concat(userDetails.bio, "\" location:\"").concat(userDetails.location, "\" status: \"").concat(userDetails.status, "\"}){\n          bio\n          location\n          status\n        }\n      }\n    ")
+              query: "\n      query{\n        users{\n          _id\n          username\n          imageUrl\n          bio\n          location\n          status\n          posts{\n            _id\n            content\n            commentCount\n            likeCount\n            createdAt\n            creator{\n              username\n              imageUrl\n              _id\n            }\n            comments{\n              _id\n              content\n              createdAt\n              imageUrl\n              postId\n              userId\n              username\n            }\n          }\n        }\n      }"
             };
             _context5.prev = 1;
             _context5.next = 4;
-            return regeneratorRuntime.awrap(_axios["default"].post(process.env.REACT_APP_API_URL + '/graphql', reqBody));
+            return regeneratorRuntime.awrap(_axios["default"].post("".concat(process.env.REACT_APP_API_URL, "/graphql"), reqBody));
 
           case 4:
             res = _context5.sent;
+            dispatch({
+              type: _types.SET_USERS,
+              payload: res.data.data.users
+            });
+            _context5.next = 11;
+            break;
+
+          case 8:
+            _context5.prev = 8;
+            _context5.t0 = _context5["catch"](1);
+            console.log(_context5.t0);
+
+          case 11:
+          case "end":
+            return _context5.stop();
+        }
+      }
+    }, null, null, [[1, 8]]);
+  };
+};
+
+var editUserDetails = function editUserDetails(userDetails) {
+  return function _callee6(dispatch) {
+    var reqBody, res;
+    return regeneratorRuntime.async(function _callee6$(_context6) {
+      while (1) {
+        switch (_context6.prev = _context6.next) {
+          case 0:
+            reqBody = {
+              query: "\n      mutation{\n        editUserDetails(userDetails:{bio:\"".concat(userDetails.bio, "\" location:\"").concat(userDetails.location, "\" status: \"").concat(userDetails.status, "\"}){\n          bio\n          location\n          status\n        }\n      }\n    ")
+            };
+            _context6.prev = 1;
+            _context6.next = 4;
+            return regeneratorRuntime.awrap(_axios["default"].post(process.env.REACT_APP_API_URL + '/graphql', reqBody));
+
+          case 4:
+            res = _context6.sent;
             dispatch({
               type: _types.LOADING_USER_DETAILS
             });
@@ -226,17 +265,17 @@ var editUserDetails = function editUserDetails(userDetails) {
               type: _types.EDIT_USER_DETAILS,
               payload: res.data.data.editUserDetails
             });
-            _context5.next = 12;
+            _context6.next = 12;
             break;
 
           case 9:
-            _context5.prev = 9;
-            _context5.t0 = _context5["catch"](1);
-            console.log(_context5.t0);
+            _context6.prev = 9;
+            _context6.t0 = _context6["catch"](1);
+            console.log(_context6.t0);
 
           case 12:
           case "end":
-            return _context5.stop();
+            return _context6.stop();
         }
       }
     }, null, null, [[1, 9]]);
@@ -244,48 +283,6 @@ var editUserDetails = function editUserDetails(userDetails) {
 };
 
 exports.editUserDetails = editUserDetails;
-
-var getUser = function getUser(id) {
-  return function _callee6(dispatch) {
-    var res;
-    return regeneratorRuntime.async(function _callee6$(_context6) {
-      while (1) {
-        switch (_context6.prev = _context6.next) {
-          case 0:
-            dispatch({
-              type: _types.LOADING_USER
-            });
-            _context6.prev = 1;
-            _context6.next = 4;
-            return regeneratorRuntime.awrap(_axios["default"].get("".concat(process.env.REACT_APP_API_URL, "/api/user/").concat(id)));
-
-          case 4:
-            res = _context6.sent;
-            dispatch({
-              type: _types.GET_USER,
-              payload: res.data
-            });
-            _context6.next = 11;
-            break;
-
-          case 8:
-            _context6.prev = 8;
-            _context6.t0 = _context6["catch"](1);
-            console.log(_context6.t0); // dispatch({
-            //   type:SET_ERRORS,
-            //   payload: error.response.data.errors[0].message
-            // })
-
-          case 11:
-          case "end":
-            return _context6.stop();
-        }
-      }
-    }, null, null, [[1, 8]]);
-  };
-};
-
-exports.getUser = getUser;
 
 var markedNotif = function markedNotif(userId) {
   return function _callee7(dispatch) {

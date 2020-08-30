@@ -111,34 +111,35 @@ var likePost = function likePost(postId) {
       while (1) {
         switch (_context3.prev = _context3.next) {
           case 0:
+            console.log(postId);
             reqBody = {
               query: "\n      mutation{\n        likePost(postId:\"".concat(postId, "\"){\n          _id\n          content\n          creator{\n            username\n            imageUrl\n            _id\n          }\n          comments{\n            _id\n            content\n            username\n            imageUrl\n            userId\n            postId\n            createdAt\n          }\n          commentCount\n          likeCount\n          createdAt\n        }\n      }\n    ")
             };
-            _context3.prev = 1;
-            _context3.next = 4;
+            _context3.prev = 2;
+            _context3.next = 5;
             return regeneratorRuntime.awrap(_axios["default"].post(process.env.REACT_APP_API_URL + '/graphql', reqBody));
 
-          case 4:
+          case 5:
             res = _context3.sent;
             dispatch({
               type: _types.LIKE_POST,
               payload: res.data.data.likePost
             });
-            _context3.next = 12;
+            _context3.next = 13;
             break;
 
-          case 8:
-            _context3.prev = 8;
-            _context3.t0 = _context3["catch"](1);
+          case 9:
+            _context3.prev = 9;
+            _context3.t0 = _context3["catch"](2);
             console.log("ERROR", _context3.t0);
             console.log(_context3.t0.message);
 
-          case 12:
+          case 13:
           case "end":
             return _context3.stop();
         }
       }
-    }, null, null, [[1, 8]]);
+    }, null, null, [[2, 9]]);
   };
 };
 

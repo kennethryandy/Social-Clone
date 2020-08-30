@@ -125,7 +125,7 @@ const Notifications = () => {
                         <ListItemAvatar>
                           <Avatar alt={notif.sender} src={`${process.env.REACT_APP_API_URL}/${notif.imageUrl}`} />
                         </ListItemAvatar>
-                        <ListItemText color={textColor} primary={`${notif.sender} ${verb} you post.`} secondary={time}/>
+                        <ListItemText color={textColor} primary={`${notif.sender} ${verb} your post.`} secondary={time}/>
                       </MenuItem>
                     )
                   })

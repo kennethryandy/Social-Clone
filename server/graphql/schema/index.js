@@ -16,7 +16,7 @@ module.exports = buildSchema(`
     password: String
     posts: [Post!]
     notifications: [Notification!]
-    imageUrl: String!
+    imageUrl: String
     bio: String
     location: String
     status: String

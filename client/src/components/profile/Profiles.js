@@ -1,30 +1,24 @@
-import React,{useEffect} from 'react'
-import ProfilePage from './userProfile/ProfilePage'
-import UsersProfiles from './usersProfiles/UsersProfiles'
+import React from 'react'
 //Redux
-import {useDispatch, useSelector} from 'react-redux'
-import {getUser} from '../../redux/actions/userActions'
+import { useSelector } from 'react-redux'
 import ProfileSkeleton from '../layout/Skeletons/ProfileSkeleton'
+import ProfilePage from './ProfilePage'
+import { Redirect } from 'react-router-dom'
 
 const Profiles = ({match}) => {
-  const dispatch = useDispatch()
-  const user = useSelector(state => state.user)
-  const {id} = match.params
-  useEffect(() => {
-    if(id !== user?.credentials._id){
-      dispatch(getUser(id))
-    }
-  // eslint-disable-next-line
-  }, [])
-  if(!user.loading ){
-    if(id && user.credentials._id === id){
-      return <ProfilePage/>
-    }else{
-      return <UsersProfiles/>
-    }
-  }else{
-    return <ProfileSkeleton/>
-  }
+  const state = useSelector(state => state.user)
+
+  return (
+    state?.authenticated ? (
+      !state?.loading ? (
+        <ProfilePage id={match.params?.id} />
+      ) : (
+        <ProfileSkeleton/>
+      )
+    ): (
+      <Redirect to='/login'/>
+    )
+  )
 }
 
 export default Profiles
