@@ -50,7 +50,7 @@ const useStyles = makeStyles(theme => ({
     height: 'auto',
     width:'100% !important',
     borderRadius: '50%',
-    maxHeight: '15rem'
+    maxHeight: '16rem'
   },
   listItems: {
     padding: 0,
@@ -68,23 +68,23 @@ const Profile = () => {
     authenticated ? (
     <>
     <Card elevation={3} className={classes.card} variant="outlined">
-      <CardActionArea component={Link} to={`/user/${credentials._id}`}>
+      <CardActionArea component={Link} to={`/user/${credentials?._id}`}>
         <CardMedia 
           component="img"
-          image={credentials.imageUrl ? `${process.env.REACT_APP_API_URL}/api/user/img/${credentials.imageUrl}` : img}
+          image={credentials?.imageUrl ? `${process.env.REACT_APP_API_URL}/api/user/img/${credentials.imageUrl}` : img}
           alt="profile-image"
           className={classes.profileImage}
-          title={`${credentials.username} profile image`}
+          title={`${credentials?.username} profile image`}
         />
       </CardActionArea>
       <CardContent className={classes.cardContent}>
         <MuiLink component={Link} to={`/user/${credentials._id}`}>
           <Typography style={{textAlign:'center'}} gutterBottom variant="h5" component="h3">
-            {credentials.username}
+            {credentials?.username}
           </Typography>
         </MuiLink>
         <List>
-          {credentials.bio && 
+          {credentials?.bio && 
           <>
             <Divider/>
             <ListItem className={classes.listItems}>
@@ -95,7 +95,7 @@ const Profile = () => {
             </ListItem>
           </>
           }
-          {credentials.location && 
+          {credentials?.location && 
           <>
             <Divider/>
             <ListItem className={classes.listItems}>
@@ -107,7 +107,7 @@ const Profile = () => {
             <Divider/>
           </>
           }
-          {credentials.status &&
+          {credentials?.status &&
           <>
             <ListItem className={classes.listItems}>
             <ListItemIcon className={classes.icons}>

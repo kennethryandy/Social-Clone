@@ -4,8 +4,10 @@ const Schema = mongoose.Schema
 const postScema = new Schema({
   content: {
     type: String,
-    required: true,
-  } ,
+  },
+  postImageUrl: {
+    type: String
+  },
   creator: {
     type: Schema.Types.ObjectId,
     ref: 'User',

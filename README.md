@@ -46,6 +46,6 @@ $ npm start
 * React
 * Redux
 * Express
-* Graphql
 * Node.js
+* Graphql
 * MongoDB

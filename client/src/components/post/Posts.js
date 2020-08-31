@@ -1,4 +1,5 @@
 import React,{ useEffect, useState, useRef, forwardRef } from 'react'
+import img from '../../assests/no-man.jpg'
 import FlipMove from 'react-flip-move'
 import Picker from 'emoji-picker-react';
 import {Link} from 'react-router-dom'
@@ -9,7 +10,7 @@ import Like from './Like'
 import ExpandPost from './ExpandPost'
 //Redux
 import {useSelector, useDispatch} from 'react-redux'
-import {addComment} from '../../redux/actions/dataActions'
+import {addComment, deletePost} from '../../redux/actions/dataActions'
 //MATERIAL UI
 import {makeStyles} from '@material-ui/core/styles'
 import Card from '@material-ui/core/Card'
@@ -21,8 +22,14 @@ import ListItemText from '@material-ui/core/ListItemText'
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
+import CardMedia from '@material-ui/core/CardMedia';
 import Divider from '@material-ui/core/Divider'
 import Dialog from '@material-ui/core/Dialog'
+import DialogTitle from '@material-ui/core/DialogContent'
+import DialogContent from '@material-ui/core/DialogContent'
+import DialogContentText from '@material-ui/core/DialogContentText'
+import DialogActions from '@material-ui/core/DialogActions'
+import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import MuiLink from '@material-ui/core/Link'
 import Avatar from '@material-ui/core/Avatar';
@@ -34,6 +41,7 @@ import Badge from '@material-ui/core/Badge';
 import Popper from '@material-ui/core/Popper'
 import Grow from '@material-ui/core/Grow'
 import Zoom from '@material-ui/core/Zoom';
+import CircularProgress from '@material-ui/core/CircularProgress'
 //ICONS
 import AccountCircle from '@material-ui/icons/AccountCircle'
 import SendIcon from '@material-ui/icons/Send';
@@ -66,13 +74,19 @@ const useStyles = makeStyles(theme => ({
   lists: {
     padding:0,
     margin:0
+  },
+  media: {
+    height: 'auto',
+    width: '100% !important',
+    margin: 'auto',
+    border: '1px solid #e9ebee'
   }
 }))
 
 const Posts = forwardRef(({post}, ref) => {
   const dispatch = useDispatch()
   const user = useSelector(state => state.user)
-  const {loading} = useSelector(state => state.data)
+  const {loading, loadingDelete} = useSelector(state => state.data)
   const {creator, content, createdAt} = post
   const classes = useStyles()
   const [expanded, setExpanded] = useState(false);
@@ -80,6 +94,7 @@ const Posts = forwardRef(({post}, ref) => {
   const [commentInput, setCommentInput] = useState("")
   const [open, setOpen] = useState(false);
   const [openMore, setOpenMore] = useState(false);
+  const [openConfirmDelete, setOpenConfirmDelete] = useState(false)
   const anchorRef = useRef(null);
   const anchorSetting = useRef(null)
   const messagesEndRef = useRef(null)
@@ -125,13 +140,19 @@ const Posts = forwardRef(({post}, ref) => {
       return
     }
   }
+
+  const handleDeletePost = () => {
+    dispatch(deletePost(post?._id))
+    setOpenConfirmDelete(false)
+  }
+
   return (
     !loading && (
       <>
       <Card ref={ref} className={classes.cards} elevation={2}>
         <CardHeader
           avatar={
-            <Avatar component={Link} to={`/user/${creator._id}`} src={`${process.env.REACT_APP_API_URL}/api/user/img/${creator.imageUrl}`}/>
+            <Avatar component={Link} to={`/user/${creator._id}`} src={creator.imageUrl ? `${process.env.REACT_APP_API_URL}/api/user/img/${creator.imageUrl}` : img}/>
           }
           action={
             <IconButton 
@@ -148,6 +169,13 @@ const Posts = forwardRef(({post}, ref) => {
         <CardContent>
           <Typography>{content}</Typography>
         </CardContent>
+        {post?.postImageUrl &&
+          <CardMedia
+            className={classes.media}
+            component="img"
+            image={`${process.env.REACT_APP_API_URL}/api/user/img/${post?.postImageUrl}`}
+          />
+        }
         <Divider/>
         <CardActions disableSpacing className={classes.actions}>
           <Like post={post._id} likeCount={post.likeCount}/>
@@ -179,7 +207,7 @@ const Posts = forwardRef(({post}, ref) => {
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  {user.authenticated ? <Avatar className={classes.inputIcon} src={`${process.env.REACT_APP_API_URL}/api/user/img/${user.credentials.imageUrl}`}/> : <AccountCircle/>}
+                  {user.authenticated ? <Avatar className={classes.inputIcon} src={`${process.env.REACT_APP_API_URL}/api/user/img/${user.credentials?.imageUrl}`}/> : <AccountCircle/>}
                 </InputAdornment>
               ),
               endAdornment:( 
@@ -235,9 +263,14 @@ const Posts = forwardRef(({post}, ref) => {
                     style={{color: "rgba(0, 0, 0, 0.54)", marginRight: "8px"}}/>
                   <ListItemText secondary="Expand"/>
                 </MenuItem>
-                <MenuItem onClick={handleClose}>
+                <MenuItem onClick={() => setOpenConfirmDelete(true)}>
+                  {loadingDelete ? <CircularProgress size="1.8rem" color="inherit" style={{margin: 'auto'}}/> : 
+                  <>
                   <DeleteIcon fontSize="small" style={{color: "rgba(0, 0, 0, 0.54)", marginRight: "8px"}}/>
                   <ListItemText secondary="Delete"/>
+                  </>
+                  }
+                  
                 </MenuItem>
               </MenuList>
             </ClickAwayListener>
@@ -250,6 +283,25 @@ const Posts = forwardRef(({post}, ref) => {
           <CloseIcon />
         </IconButton>
         <ExpandPost post={post} imageUrl={creator.imageUrl} username={creator.username} setExpandPost={setExpandPost}/>
+      </Dialog>
+      <Dialog
+        open={openConfirmDelete}
+        onClose={() => setOpenConfirmDelete(false)}
+      >
+      <DialogTitle>{"Delete post?"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Are you sure you want to delete this post?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenConfirmDelete(false)} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleDeletePost} color="primary" autoFocus>
+            Confirm
+          </Button>
+        </DialogActions>
       </Dialog>
       </>
     )

@@ -49,7 +49,7 @@ const Notifications = () => {
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
-    const marked = notifications.length > 0 && notifications.filter(notif => notif.read === false)
+    const marked = notifications?.filter(notif => notif.read === false)
     if(marked.length > 0){
       dispatch(markedNotif(state.credentials._id))
     }
@@ -79,7 +79,7 @@ const Notifications = () => {
     }
     handleClose()
   }
-  const unreadNotif = notifications.filter(notif => notif.read === false)
+  const unreadNotif = notifications?.filter(notif => notif.read === false)
   const notificationsIcon = notifications && notifications.length > 0 ? (
     unreadNotif && unreadNotif.length > 0 ? (
       <Badge badgeContent={unreadNotif.length} color="primary">

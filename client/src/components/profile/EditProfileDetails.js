@@ -9,6 +9,8 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 
 const EditProfileDetails = ({open, setOpen}) => {
   const dispatch = useDispatch()
@@ -71,15 +73,21 @@ const EditProfileDetails = ({open, setOpen}) => {
             value={detailInput.location}
             onChange={e => handleChange(e)}
           />
-          <TextField
-            margin="dense"
-            name="status"
-            label="Relationship Status"
-            type="text"
-            fullWidth
-            value={detailInput.status}
-            onChange={e => handleChange(e)}
-          />
+          <Select
+          name="status"
+          style={{marginTop: '2rem'}}
+          value={detailInput.status}
+          onChange={e => handleChange(e)}
+          displayEmpty
+          fullWidth
+        >
+          <MenuItem value="" disabled>
+            Select Status
+          </MenuItem>
+          <MenuItem value="Single">Single</MenuItem>
+          <MenuItem value="Married">Married</MenuItem>
+          <MenuItem value="In a relationship">In a relationship</MenuItem>
+        </Select>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpen(false)}  color="primary">

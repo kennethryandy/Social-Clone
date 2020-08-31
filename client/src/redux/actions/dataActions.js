@@ -1,8 +1,16 @@
 import { GET_POSTS, LIKE_POST, UNLIKE_POST,ADD_COMMENT,
-  CREATE_POST, LOADING_DATA, ADD_POST} from '../types'
+  CREATE_POST, DELETE_POST, LOADING_DATA, ADD_POST, LOADING_LIKE, LOADING_COMMENT, LOADING_CREATE_POST, LOADING_DELETE_POST} from '../types'
 import axios from 'axios'
 export const getAllPosts = () => async dispatch => {
   dispatch({type:LOADING_DATA})
+  const option = {
+    headers: {
+      'Access-Control-Allow-Credentials' : true,
+      'Access-Control-Allow-Origin':'*',
+      'Access-Control-Allow-Methods':'GET',
+      'Access-Control-Allow-Headers':'application/json',
+    }
+  }
   try {
     const reqBody = {
       query: `
@@ -10,6 +18,7 @@ export const getAllPosts = () => async dispatch => {
           posts{
             _id
             content
+            postImageUrl
             creator{
               username
               imageUrl
@@ -41,7 +50,8 @@ export const getAllPosts = () => async dispatch => {
   }
 }
 
-export const createPost = (content) => async dispatch => {
+export const createPost = (content, formData) => async dispatch => {
+  dispatch({type: LOADING_CREATE_POST})
   const reqBody = {
     query: `
       mutation{
@@ -71,32 +81,57 @@ export const createPost = (content) => async dispatch => {
     `
   }
   try {
-    const res = await axios.post(process.env.REACT_APP_API_URL+'/graphql', reqBody)
-    dispatch({
-      type: CREATE_POST,
-      payload: res.data.data.createPost
-    })
-    dispatch({
-      type: ADD_POST,
-      payload: {
-        ...res.data.data.createPost,
-        creator: res.data.data.createPost.creator._id
+    if(formData){
+      const resImageUrl = await axios.post(process.env.REACT_APP_API_URL+'/api/user/postImage', (formData))
+      if(resImageUrl.data.success){
+        const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/user/postImageInput/${resImageUrl.data.postImageUrl}`, {content})
+        dispatch({
+          type: CREATE_POST,
+          payload: res.data
+        })
+        dispatch({
+          type: ADD_POST,
+          payload: {
+            ...res.data,
+            creator: res.data.creator._id
+          }
+        })
       }
-    })
+    }else{
+      const res = await axios.post(process.env.REACT_APP_API_URL+'/graphql', reqBody)
+      dispatch({
+        type: CREATE_POST,
+        payload: res.data.data.createPost
+      })
+      dispatch({
+        type: ADD_POST,
+        payload: {
+          ...res.data.data.createPost,
+          creator: res.data.data.createPost.creator._id
+        }
+      })
+    }
   } catch (error) {
     console.log(error);
   }
 }
-
-
+export const deletePost = (postId) => async dispatch => {
+  dispatch({type:LOADING_DELETE_POST})
+  await axios.delete(`${process.env.REACT_APP_API_URL}/api/post/${postId}`)
+  dispatch({
+    type: DELETE_POST,
+    payload: postId
+  })
+}
 export const likePost = (postId) => async dispatch => {
-  console.log(postId)
+  dispatch({type: LOADING_LIKE})
   const reqBody = {
     query: `
       mutation{
         likePost(postId:"${postId}"){
           _id
           content
+          postImageUrl
           creator{
             username
             imageUrl
@@ -131,12 +166,14 @@ export const likePost = (postId) => async dispatch => {
 }
 
 export const unlikePost = (postId) => async dispatch => {
+  dispatch({type: LOADING_LIKE})
   const reqBody = {
     query: `
       mutation{
         unlikePost(postId:"${postId}"){
           _id
           content
+          postImageUrl
           creator{
             username
             imageUrl
@@ -166,6 +203,7 @@ export const unlikePost = (postId) => async dispatch => {
 }
 
 export const addComment = (postId, content) => async dispatch => {
+  dispatch({type:LOADING_COMMENT})
   const reqBody = {
     query:`
       mutation{

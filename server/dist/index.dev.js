@@ -17,8 +17,11 @@ var app = express();
 app.use(express.json());
 app.use(helmet());
 app.use(cors({
-  origin: process.env.CORS_ORIGIN
-}));
+  origin: '*'
+})); // app.use(cors({
+//   origin: process.env.NODE_ENV === 'production' ? process.env.CORS_ORIGIN : 'http://localhost:3000'
+// }));
+
 app.use('/uploads', express["static"]('uploads'));
 
 var rootSchema = require('./graphql/schema');
@@ -53,6 +56,7 @@ var errorHandlers = require('./middlewares/errorHandlers');
 app.use(errorHandlers.notFound);
 app.use(errorHandlers.errorHandler);
 mongoose.connect(process.env.MONGODB_URI, {
+  useCreateIndex: true,
   useNewUrlParser: true,
   useUnifiedTopology: true
 }).then(function () {

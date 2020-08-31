@@ -35,7 +35,8 @@ module.exports = buildSchema(`
 
   type Post {
     _id: ID!
-    content: String!
+    content: String
+    postImageUrl: String
     creator: User!
     comments: [Comment!]
     likes: [Like!]

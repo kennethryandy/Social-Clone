@@ -1,9 +1,10 @@
-import { GET_POSTS, LIKE_POST, UNLIKE_POST, LOADING_DATA, ADD_COMMENT, CREATE_POST} from '../types'
+import { GET_POSTS, LIKE_POST, UNLIKE_POST, LOADING_DATA, ADD_COMMENT, CREATE_POST, DELETE_POST, LOADING_CREATE_POST, LOADING_DELETE_POST} from '../types'
 
 const initialState = {
   posts:[],
-  post: {},
-  loading: false
+  loading: false,
+  loadingCreatePost: false,
+  loadingDelete: false,
 }
 
 export default (state = initialState, action) => {
@@ -12,6 +13,16 @@ export default (state = initialState, action) => {
       return {
         ...state,
         loading: true
+      }
+    case LOADING_CREATE_POST:
+      return {
+        ...state,
+        loadingCreatePost: true
+      }
+    case LOADING_DELETE_POST:
+      return {
+        ...state,
+        loadingDelete: true
       }
     case GET_POSTS:
       return {
@@ -22,7 +33,14 @@ export default (state = initialState, action) => {
     case CREATE_POST: 
       return{
         ...state,
-        posts: [action.payload, ...state.posts]
+        posts: [action.payload, ...state.posts],
+        loadingCreatePost: false
+      }
+    case DELETE_POST: 
+      return {
+        ...state,
+        posts: state.posts.filter(post => post._id !== action.payload),
+        loadingDelete: false
       }
     case ADD_COMMENT:
       const newPosts = state.posts.map(post => {

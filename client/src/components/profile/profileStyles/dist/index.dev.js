@@ -10,6 +10,7 @@ var _styles = require("@material-ui/core/styles");
 var profileStyles = (0, _styles.makeStyles)(function (theme) {
   return {
     title: {
+      marginTop: "1rem",
       textAlign: 'center',
       textTransform: 'capitalize'
     },
@@ -28,10 +29,14 @@ var profileStyles = (0, _styles.makeStyles)(function (theme) {
       marginTop: theme.spacing(3)
     },
     profileImage: {
+      width: '100% !important',
       borderRadius: '50%',
       border: '4px solid #FFF',
-      maxHeight: 300,
-      margin: 'auto'
+      maxWidth: 250,
+      maxHeight: 250,
+      minWidth: 250,
+      minHeight: 250,
+      margin: '1rem auto 0 auto'
     },
     imageButton: {
       display: 'flex'
@@ -49,6 +54,9 @@ var profileStyles = (0, _styles.makeStyles)(function (theme) {
       width: '70%',
       textAlign: 'center',
       margin: "".concat(theme.spacing(2), "px 0")
+    },
+    editIconBtn: {
+      margin: "-52px 0 0 12rem"
     }
   };
 });

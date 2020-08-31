@@ -107,7 +107,7 @@ const Navbar = () => {
           <>
             <div className={classes.NavLinks}>
               <Button className={classes.navLink} color="inherit" component={NavLink} to="/">Home</Button>
-              <Button className={classes.navLink} color="inherit" component={NavLink} to={state ? `/user/${credentials._id}` : '/'}>{!loading ? credentials.username : 'PROFILE'}</Button>
+              <Button className={classes.navLink} color="inherit" component={NavLink} to={state ? `/user/${credentials?._id}` : '/'}>{!loading ? credentials.username : 'PROFILE'}</Button>
             </div>
             <Notifications />
             <IconButton ref={anchorRef}

@@ -6,13 +6,14 @@ import ThumbUpOutlinedIcon from '@material-ui/icons/ThumbUpOutlined';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import Badge from '@material-ui/core/Badge';
+import {makeStyles} from '@material-ui/core/styles'
 
 const Like = ({post, likeCount}) => {
   const dispatch = useDispatch()
   const user = useSelector(state => state.user)
   const likedPost = () => {
-    const liked = user.likes.find(like => like.post === post)
-    if(user.likes.length > 0 && liked) return true
+    const liked = user.likes?.find(like => like.post === post)
+    if(user.likes?.length > 0 && liked) return true
     else return false
   }
   const handleLike = () => {
@@ -23,7 +24,7 @@ const Like = ({post, likeCount}) => {
   }
   const likeButton = !user.authenticated ? (
     <Tooltip title="Like" placement="top">
-      <IconButton onClick={() => handleLike()} color="primary">
+      <IconButton disabled={user.loadingLike} onClick={() => handleLike()} color="primary">
         <Badge color="primary" badgeContent={likeCount}>
           <ThumbUpOutlinedIcon />
         </Badge>
@@ -32,20 +33,20 @@ const Like = ({post, likeCount}) => {
   ): (
     likedPost() ? (
       <Tooltip title="Unlike" placement="top">
-        <IconButton onClick={handleUnlike} color="primary">
+        <IconButton disabled={user.loadingLike} onClick={handleUnlike} color="primary">
           <Badge color="primary" badgeContent={likeCount}>
             <ThumbUpRoundedIcon />
           </Badge>
         </IconButton>
       </Tooltip>): (
       <Tooltip title="Like" placement="top">
-        <IconButton onClick={handleLike} color="primary">
+        <IconButton disabled={user.loadingLike} onClick={handleLike} color="primary">
           <Badge color="primary" badgeContent={likeCount}>
             <ThumbUpOutlinedIcon />
           </Badge>
         </IconButton>
       </Tooltip>
-      )
+    )
   )
   return likeButton
 }

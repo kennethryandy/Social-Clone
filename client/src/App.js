@@ -10,6 +10,7 @@ import Profiles from './components/profile/Profiles'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
 import Home from './pages/Home';
+import NotFound from './pages/NotFound'
 //Material ui
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { ThemeProvider } from '@material-ui/styles'
@@ -47,6 +48,7 @@ function App() {
             <Route path="/login" render={() => authenticated ? <Redirect to="/"/> : <Login />} exact/>
             <Route path="/signup" render={() => authenticated ? <Redirect to="/"/> : <Signup />} exact/>
             <Route path='/user/:id' component={Profiles} exact/>
+            <Route path="*" component={NotFound} />
           </Switch>
           </div>
         </Router>

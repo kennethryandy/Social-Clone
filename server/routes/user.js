@@ -10,6 +10,9 @@ const Notification = require('../model/notifications')
 const Post = require('../model/posts')
 const Comment = require('../model/comments')
 
+const merge = require('../graphql/resolvers/merge')
+const {toDateString} = require('../helpers/toDateString')
+
 const router = Router();
 
 const conn = mongoose.connection
@@ -35,7 +38,7 @@ const storage = new GridFsStorage({
 });
 
 const fileFilter = (req, file, cb) => {
-  if(file.mimetype === 'image/jpeg' || file.mimetype === 'image/png'){
+  if(file.mimetype === 'image/jpeg' || file.mimetype === 'image/png' || file.mimetype === 'image/gif'){
     cb(null, true)
   }else{
     cb(new Error('Invalid file type'), false)
@@ -53,7 +56,7 @@ conn.once('open', () => {
     bucketName: "uploads"
   });
 
-  //Upload Image
+  //Upload Image Profile Image
   router.post('/uploadImage',upload.single('uploadImage'), async (req, res) => {
     if(!req.isAuth){
       const err = new Error('Unauthorized!')
@@ -76,7 +79,44 @@ conn.once('open', () => {
       return next(error)
     }
   })
+
+  //CreatePost Image Upload
+  router.post('/postImage', upload.single('uploadImage'), async (req, res, next) => {
+    if(!req.isAuth){
+      const err = new Error('Unauthorized!')
+      return next(err)
+    }
+    const newPost = new Post({
+      postImageUrl: req.file.filename,
+      creator: req.user.userId
+    })
+    const user = await User.findById(req.user.userId)
+    if(user){
+      user.posts.push(newPost)
+      await user.save()
+      await newPost.save()
+      res.json({
+        postImageUrl: req.file.filename,
+        success: true,
+      })
+    }else{
+      const err = new Error("User not found")
+      res.status(404)
+      return next(err)
+    }
+  })
 });
+
+router.post('/postImageInput/:filename', async (req, res) => {
+  const post = await Post.findOne({postImageUrl: req.params.filename}).populate('creator')
+  post.content = req.body.content
+  await post.save()
+  res.json({
+    ...post._doc,
+    createdAt: toDateString(post.createdAt),
+    updatedAt: toDateString(post.updatedAt)
+  })
+})
 
 router.get("/img/:filename", (req, res) => {
   gfs

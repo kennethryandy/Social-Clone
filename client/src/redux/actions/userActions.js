@@ -18,7 +18,6 @@ export const loginUser = (userData, history) => async dispatch => {
   try {
     const res = await axios.post(process.env.REACT_APP_API_URL+'/graphql', userData)
     setAuthorizationHeaders(res.data.data.login.token)
-    dispatch(setUsers)
     dispatch(getUserData())
     dispatch({type: CLEAR_ERRORS})
     history.push('/')
@@ -36,7 +35,6 @@ export const signupUser = (newUser, history) => async dispatch => {
   try {
     const res = await axios.post(process.env.REACT_APP_API_URL+'/graphql', newUser)
     setAuthorizationHeaders(res.data.data.signup.token)
-    dispatch(setUsers)
     dispatch(getUserData())
     dispatch({type: CLEAR_ERRORS})
     history.push('/')
@@ -56,6 +54,7 @@ export const logoutUser = () => dispatch => {
 }
 
 export const getUserData = () => async dispatch => {
+  dispatch(setUsers())
   dispatch({type:LOADING_USER})
   try {
     const res = await axios.get(process.env.REACT_APP_API_URL+'/api/user')
@@ -105,6 +104,7 @@ const setUsers = () => async dispatch => {
   }
   try {
     const res = await axios.post(`${process.env.REACT_APP_API_URL}/graphql`, reqBody)
+    dispatch({type:LOADING_USER_DETAILS})
     dispatch({
       type: SET_USERS,
       payload: res.data.data.users
@@ -128,7 +128,7 @@ export const editUserDetails = (userDetails) => async dispatch => {
   }
   try {
     const res = await axios.post(process.env.REACT_APP_API_URL+'/graphql', reqBody)
-    dispatch({type:LOADING_USER_DETAILS})
+    dispatch(setUsers())
     dispatch({
       type:EDIT_USER_DETAILS,
       payload: res.data.data.editUserDetails
