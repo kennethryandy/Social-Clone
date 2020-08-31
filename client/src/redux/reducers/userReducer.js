@@ -33,7 +33,6 @@ export default (state = initialState, action) => {
       return {
         ...state,
         authenticated: true,
-        allUsers: [...state.allUsers],
         ...action.payload,
         loading: false,
         loadingProfile: false
@@ -41,7 +40,6 @@ export default (state = initialState, action) => {
     case SET_USERS:
       return {
         ...state,
-        authenticated: true,
         allUsers: action.payload,
         loadingUserDetails: false
       }

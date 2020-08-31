@@ -2,6 +2,7 @@ import React,{useState, useRef} from 'react'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import ExpandPost from '../post/ExpandPost' 
+import img from '../../assests/no-man.jpg'
 //Redux
 import {useDispatch, useSelector} from 'react-redux'
 import {markedNotif} from '../../redux/actions/userActions'
@@ -123,7 +124,7 @@ const Notifications = () => {
                         }} 
                         key={notif._id}>
                         <ListItemAvatar>
-                          <Avatar alt={notif.sender} src={`${process.env.REACT_APP_API_URL}/${notif.imageUrl}`} />
+                          <Avatar alt={notif.sender} src={notif.imageUrl ? `${process.env.REACT_APP_API_URL}/api/user/img/${notif.imageUrl}` : img} />
                         </ListItemAvatar>
                         <ListItemText color={textColor} primary={`${notif.sender} ${verb} your post.`} secondary={time}/>
                       </MenuItem>

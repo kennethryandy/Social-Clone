@@ -142,8 +142,9 @@ const Posts = forwardRef(({post}, ref) => {
   }
 
   const handleDeletePost = () => {
-    dispatch(deletePost(post?._id))
+    dispatch(deletePost(post._id))
     setOpenConfirmDelete(false)
+    setOpenMore(true)
   }
 
   return (
@@ -159,7 +160,8 @@ const Posts = forwardRef(({post}, ref) => {
               onClick={() => setOpenMore(prevState => !prevState)}
               ref={anchorSetting}
               aria-controls={openMore ? 'menu-list-grow' : undefined}
-              aria-haspopup="true">
+              aria-haspopup="true"
+              >
               <MoreIcon />
             </IconButton>
           }
@@ -173,7 +175,7 @@ const Posts = forwardRef(({post}, ref) => {
           <CardMedia
             className={classes.media}
             component="img"
-            image={`${process.env.REACT_APP_API_URL}/api/user/img/${post?.postImageUrl}`}
+            image={post.postImageUrl ? `${process.env.REACT_APP_API_URL}/api/user/img/${post?.postImageUrl}` : img}
           />
         }
         <Divider/>
@@ -207,7 +209,7 @@ const Posts = forwardRef(({post}, ref) => {
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  {user.authenticated ? <Avatar className={classes.inputIcon} src={`${process.env.REACT_APP_API_URL}/api/user/img/${user.credentials?.imageUrl}`}/> : <AccountCircle/>}
+                  {user.authenticated ? <Avatar className={classes.inputIcon} src={user.credentials.imageUrl ? `${process.env.REACT_APP_API_URL}/api/user/img/${user.credentials?.imageUrl}` : img}/> : <AccountCircle/>}
                 </InputAdornment>
               ),
               endAdornment:( 
@@ -263,15 +265,19 @@ const Posts = forwardRef(({post}, ref) => {
                     style={{color: "rgba(0, 0, 0, 0.54)", marginRight: "8px"}}/>
                   <ListItemText secondary="Expand"/>
                 </MenuItem>
-                <MenuItem onClick={() => setOpenConfirmDelete(true)}>
-                  {loadingDelete ? <CircularProgress size="1.8rem" color="inherit" style={{margin: 'auto'}}/> : 
-                  <>
-                  <DeleteIcon fontSize="small" style={{color: "rgba(0, 0, 0, 0.54)", marginRight: "8px"}}/>
-                  <ListItemText secondary="Delete"/>
-                  </>
-                  }
-                  
-                </MenuItem>
+                {post.creator?._id === user.credentials?._id &&
+                  <MenuItem onClick={() => {
+                    setOpenConfirmDelete(true)
+                    setOpenMore(false)
+                  }}>
+                    {loadingDelete ? <CircularProgress size="1.8rem" color="inherit" style={{margin: 'auto'}}/> : 
+                    <>
+                    <DeleteIcon fontSize="small" style={{color: "rgba(0, 0, 0, 0.54)", marginRight: "8px"}}/>
+                    <ListItemText secondary="Delete"/>
+                    </>
+                    }
+                  </MenuItem>
+                }
               </MenuList>
             </ClickAwayListener>
           </Paper>

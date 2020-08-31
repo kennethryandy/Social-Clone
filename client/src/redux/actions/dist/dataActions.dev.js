@@ -19,22 +19,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 var getAllPosts = function getAllPosts() {
   return function _callee(dispatch) {
-    var option, reqBody, res;
+    var reqBody, res;
     return regeneratorRuntime.async(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
+            setAxiosHeaders();
             dispatch({
               type: _types.LOADING_DATA
             });
-            option = {
-              headers: {
-                'Access-Control-Allow-Credentials': true,
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Methods': 'GET',
-                'Access-Control-Allow-Headers': 'application/json'
-              }
-            };
             _context.prev = 2;
             reqBody = {
               query: "\n        query{\n          posts{\n            _id\n            content\n            postImageUrl\n            creator{\n              username\n              imageUrl\n              _id\n            }\n            comments{\n              _id\n              content\n              username\n              imageUrl\n              userId\n              postId\n              createdAt\n            }\n            commentCount\n            likeCount\n            createdAt\n          }\n        }\n      "
@@ -84,27 +77,28 @@ var createPost = function createPost(content, formData) {
             _context2.prev = 2;
 
             if (!formData) {
-              _context2.next = 15;
+              _context2.next = 16;
               break;
             }
 
-            _context2.next = 6;
+            console.log(formData);
+            _context2.next = 7;
             return regeneratorRuntime.awrap(_axios["default"].post(process.env.REACT_APP_API_URL + '/api/user/postImage', formData));
 
-          case 6:
+          case 7:
             resImageUrl = _context2.sent;
 
             if (!resImageUrl.data.success) {
-              _context2.next = 13;
+              _context2.next = 14;
               break;
             }
 
-            _context2.next = 10;
+            _context2.next = 11;
             return regeneratorRuntime.awrap(_axios["default"].post("".concat(process.env.REACT_APP_API_URL, "/api/user/postImageInput/").concat(resImageUrl.data.postImageUrl), {
               content: content
             }));
 
-          case 10:
+          case 11:
             res = _context2.sent;
             dispatch({
               type: _types.CREATE_POST,
@@ -117,15 +111,16 @@ var createPost = function createPost(content, formData) {
               })
             });
 
-          case 13:
-            _context2.next = 20;
+          case 14:
+            _context2.next = 22;
             break;
 
-          case 15:
-            _context2.next = 17;
+          case 16:
+            console.log(formData);
+            _context2.next = 19;
             return regeneratorRuntime.awrap(_axios["default"].post(process.env.REACT_APP_API_URL + '/graphql', reqBody));
 
-          case 17:
+          case 19:
             _res = _context2.sent;
             dispatch({
               type: _types.CREATE_POST,
@@ -138,21 +133,21 @@ var createPost = function createPost(content, formData) {
               })
             });
 
-          case 20:
-            _context2.next = 25;
+          case 22:
+            _context2.next = 27;
             break;
 
-          case 22:
-            _context2.prev = 22;
+          case 24:
+            _context2.prev = 24;
             _context2.t0 = _context2["catch"](2);
             console.log(_context2.t0);
 
-          case 25:
+          case 27:
           case "end":
             return _context2.stop();
         }
       }
-    }, null, null, [[2, 22]]);
+    }, null, null, [[2, 24]]);
   };
 };
 
@@ -305,3 +300,9 @@ var addComment = function addComment(postId, content) {
 };
 
 exports.addComment = addComment;
+
+var setAxiosHeaders = function setAxiosHeaders() {
+  _axios["default"].defaults.headers.common['Access-Control-Allow-Origin'] = '*';
+  _axios["default"].defaults.headers.common['Access-Control-Allow-Methods'] = 'GET,POST,DELETE';
+  _axios["default"].defaults.headers.common['Access-Control-Allow-Headers'] = 'application/json';
+};

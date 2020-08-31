@@ -71,7 +71,7 @@ const Profile = () => {
       <CardActionArea component={Link} to={`/user/${credentials?._id}`}>
         <CardMedia 
           component="img"
-          image={credentials?.imageUrl ? `${process.env.REACT_APP_API_URL}/api/user/img/${credentials.imageUrl}` : img}
+          image={credentials.imageUrl ? `${process.env.REACT_APP_API_URL}/api/user/img/${credentials.imageUrl}` : img}
           alt="profile-image"
           className={classes.profileImage}
           title={`${credentials?.username} profile image`}

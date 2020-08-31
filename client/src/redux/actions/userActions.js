@@ -54,7 +54,7 @@ export const logoutUser = () => dispatch => {
 }
 
 export const getUserData = () => async dispatch => {
-  dispatch(setUsers())
+  setAxiosHeaders()
   dispatch({type:LOADING_USER})
   try {
     const res = await axios.get(process.env.REACT_APP_API_URL+'/api/user')
@@ -67,7 +67,8 @@ export const getUserData = () => async dispatch => {
   }
 }
 
-const setUsers = () => async dispatch => {
+export const setUsers = () => async dispatch => {
+  setAxiosHeaders()
   const reqBody = {
     query: `
       query{
@@ -128,7 +129,6 @@ export const editUserDetails = (userDetails) => async dispatch => {
   }
   try {
     const res = await axios.post(process.env.REACT_APP_API_URL+'/graphql', reqBody)
-    dispatch(setUsers())
     dispatch({
       type:EDIT_USER_DETAILS,
       payload: res.data.data.editUserDetails
@@ -153,4 +153,10 @@ const setAuthorizationHeaders = token => {
   const userToken = `Bearer ${token}`
   localStorage.setItem('userToken', userToken)
   axios.defaults.headers.common['Authorization'] = userToken
+}
+
+const setAxiosHeaders = () => {
+  axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*'
+  axios.defaults.headers.common['Access-Control-Allow-Methods'] = 'GET,POST,DELETE'
+  axios.defaults.headers.common['Access-Control-Allow-Headers'] = 'application/json'
 }

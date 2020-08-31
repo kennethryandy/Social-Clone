@@ -26,10 +26,12 @@ var initialState = {
   loading: false,
   loadingUserDetails: false,
   loadingProfile: false,
+  loadingLike: false,
+  loadingComment: false,
   credentials: {},
   likes: [],
   notifications: [],
-  users: []
+  allUsers: []
 };
 
 var _default = function _default() {
@@ -62,8 +64,8 @@ var _default = function _default() {
 
     case _types.SET_USERS:
       return _objectSpread({}, state, {
-        authenticated: true,
-        users: action.payload
+        allUsers: action.payload,
+        loadingUserDetails: false
       });
 
     case _types.LOADING_USER:
@@ -71,19 +73,31 @@ var _default = function _default() {
         loading: true
       });
 
+    case _types.LOADING_LIKE:
+      return _objectSpread({}, state, {
+        loadingLike: true
+      });
+
+    case _types.LOADING_COMMENT:
+      return _objectSpread({}, state, {
+        loadingComment: true
+      });
+
     case _types.LIKE_POST:
       return _objectSpread({}, state, {
         likes: [].concat(_toConsumableArray(state.likes), [{
           user: state.credentials._id,
           post: action.payload._id
-        }])
+        }]),
+        loadingLike: false
       });
 
     case _types.UNLIKE_POST:
       return _objectSpread({}, state, {
         likes: state.likes.filter(function (like) {
           return like.post !== action.payload._id;
-        })
+        }),
+        loadingLike: false
       });
 
     case _types.LOADING_USER_DETAILS:
@@ -94,9 +108,9 @@ var _default = function _default() {
     case _types.EDIT_USER_DETAILS:
       return _objectSpread({}, state, {
         credentials: _objectSpread({}, state.credentials, {
-          bio: action.payload.bio,
-          location: action.payload.location,
-          status: action.payload.status
+          bio: action.payload.bio ? action.payload.bio : "",
+          location: action.payload.location ? action.payload.location : "",
+          status: action.payload.status ? action.payload.status : ""
         }),
         loadingUserDetails: false
       });
@@ -121,7 +135,8 @@ var _default = function _default() {
       return _objectSpread({}, state, {
         credentials: _objectSpread({}, state.credentials, {
           posts: newComment
-        })
+        }),
+        loadingComment: false
       });
 
     case _types.MARKED_NOTIFICATIONS_READ:

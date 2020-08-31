@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react'
+import img from '../../assests/no-man.jpg'
 import Picker from 'emoji-picker-react';
 import {withRouter} from 'react-router-dom'
 //Redux
@@ -141,7 +142,7 @@ const CreatePost = (props) => {
       InputProps={{
         startAdornment: (
           <InputAdornment position="start">
-            <Avatar src={`${process.env.REACT_APP_API_URL}/api/user/img/${credentials?.imageUrl}`} style={{marginLeft: '8px'}}/>
+            <Avatar src={credentials.imageUrl ? `${process.env.REACT_APP_API_URL}/api/user/img/${credentials?.imageUrl}` : img} style={{marginLeft: '8px'}}/>
           </InputAdornment>
         ),
         endAdornment: (
@@ -174,7 +175,7 @@ const CreatePost = (props) => {
       {postImage && 
       <div onClick={() => setOpenConfirmation(true)} className={classes.postImgContainer}>
         <Tooltip title="Remove item">
-          <img src={postImage.img} className={classes.postImage}/>
+          <img src={postImage.img} alt="Post" className={classes.postImage}/>
         </Tooltip>
       </div>
       }

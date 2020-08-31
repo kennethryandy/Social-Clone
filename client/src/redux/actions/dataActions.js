@@ -1,16 +1,10 @@
 import { GET_POSTS, LIKE_POST, UNLIKE_POST,ADD_COMMENT,
   CREATE_POST, DELETE_POST, LOADING_DATA, ADD_POST, LOADING_LIKE, LOADING_COMMENT, LOADING_CREATE_POST, LOADING_DELETE_POST} from '../types'
 import axios from 'axios'
+
 export const getAllPosts = () => async dispatch => {
+  setAxiosHeaders()
   dispatch({type:LOADING_DATA})
-  const option = {
-    headers: {
-      'Access-Control-Allow-Credentials' : true,
-      'Access-Control-Allow-Origin':'*',
-      'Access-Control-Allow-Methods':'GET',
-      'Access-Control-Allow-Headers':'application/json',
-    }
-  }
   try {
     const reqBody = {
       query: `
@@ -82,7 +76,8 @@ export const createPost = (content, formData) => async dispatch => {
   }
   try {
     if(formData){
-      const resImageUrl = await axios.post(process.env.REACT_APP_API_URL+'/api/user/postImage', (formData))
+      console.log(formData)
+      const resImageUrl = await axios.post(process.env.REACT_APP_API_URL+'/api/user/postImage', formData)
       if(resImageUrl.data.success){
         const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/user/postImageInput/${resImageUrl.data.postImageUrl}`, {content})
         dispatch({
@@ -98,6 +93,7 @@ export const createPost = (content, formData) => async dispatch => {
         })
       }
     }else{
+      console.log(formData)
       const res = await axios.post(process.env.REACT_APP_API_URL+'/graphql', reqBody)
       dispatch({
         type: CREATE_POST,
@@ -228,4 +224,11 @@ export const addComment = (postId, content) => async dispatch => {
   } catch (error) {
     console.log(error.message)
   }
+}
+
+
+const setAxiosHeaders = () => {
+  axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*'
+  axios.defaults.headers.common['Access-Control-Allow-Methods'] = 'GET,POST,DELETE'
+  axios.defaults.headers.common['Access-Control-Allow-Headers'] = 'application/json'
 }

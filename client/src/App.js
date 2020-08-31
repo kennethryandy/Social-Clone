@@ -1,8 +1,10 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {BrowserRouter as Router, Route, Switch, Redirect} from 'react-router-dom'
 
 //REDUX
-import {useSelector} from 'react-redux'
+import {useSelector, useDispatch} from 'react-redux'
+import { getAllPosts } from './redux/actions/dataActions';
+import { setUsers } from './redux/actions/userActions';
 //components
 import Navbar from './components/layout/Navbar'
 import Profiles from './components/profile/Profiles'
@@ -37,6 +39,15 @@ const theme = createMuiTheme({
 
 function App() {
   const authenticated = useSelector(state => state.user.authenticated)
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(getAllPosts())
+    dispatch(setUsers())
+
+    //eslint-disable-next-line
+  },[])
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />

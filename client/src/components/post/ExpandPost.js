@@ -1,4 +1,5 @@
 import React,{useState} from 'react'
+import img from '../../assests/no-man.jpg'
 import {Link} from 'react-router-dom'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
@@ -13,6 +14,7 @@ import Card from '@material-ui/core/Card'
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
+import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography'
 import MuiLink from '@material-ui/core/Link'
 import Avatar from '@material-ui/core/Avatar';
@@ -39,6 +41,12 @@ const useStyles = makeStyles(theme => ({
   },
   inputIcon: {
     marginRight: theme.spacing(1)
+  },
+  media: {
+    height: 'auto',
+    width: '100% !important',
+    margin: 'auto',
+    border: '1px solid #e9ebee'
   }
 }))
 
@@ -74,6 +82,13 @@ const ExpandPost = ({post, setExpandPost, imageUrl, username}) => {
         <CardContent>
           <Typography>{content}</Typography>
         </CardContent>
+        {post?.postImageUrl &&
+          <CardMedia
+            className={classes.media}
+            component="img"
+            image={post.postImageUrl ? `${process.env.REACT_APP_API_URL}/api/user/img/${post?.postImageUrl}` : img}
+          />
+        }
         <Divider/>
         <CardActions disableSpacing className={classes.actions}>
           <Like post={post._id} likeCount={post.likeCount}/>

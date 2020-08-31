@@ -18,7 +18,7 @@ const NotFound = () => {
   const classes = useStyles()
   return (
     <div className={classes.mainWrapper}>
-      <img src={brokenImg} />
+      <img src={brokenImg} alt="default"/>
       <Typography style={{margin:"1rem 0"}} variant="h3" color="primary">Sorry! we can't find this page.</Typography>
       <Typography variant="h5"><MuiLink component={Link} to='/'>Go back</MuiLink></Typography>
     </div>

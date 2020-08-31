@@ -108,18 +108,24 @@ conn.once('open', () => {
 });
 
 router.post('/postImageInput/:filename', async (req, res) => {
-  const post = await Post.findOne({postImageUrl: req.params.filename}).populate('creator')
-  post.content = req.body.content
-  await post.save()
-  res.json({
-    ...post._doc,
-    createdAt: toDateString(post.createdAt),
-    updatedAt: toDateString(post.updatedAt)
-  })
+  try {
+    const post = await Post.findOne({postImageUrl: req.params.filename}).populate('creator')
+    post.content = req.body.content
+    await post.save()
+    res.json({
+      ...post._doc,
+      createdAt: toDateString(post.createdAt),
+      updatedAt: toDateString(post.updatedAt)
+    })
+  } catch (error) {
+    res.status(500)
+    return next(error)
+  }
 })
 
-router.get("/img/:filename", (req, res) => {
-  gfs
+router.get("/img/:filename", async (req, res, next) => {
+  try {
+    await gfs
     .find({
       filename: req.params.filename
     })
@@ -132,6 +138,10 @@ router.get("/img/:filename", (req, res) => {
       }
       gfs.openDownloadStreamByName(files[0].filename).pipe(res);
     });
+  } catch (error) {
+    res.status(500)
+    next(error)
+  }
 });
 
 
